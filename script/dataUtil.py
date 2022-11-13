@@ -3,15 +3,13 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 import settings
 
-path = "../dataset/housePrice.csv"
-__all__ = ["clean_feature"]
 
 def corr_analyse():
     """
     correlation analyse
     :return:
     """
-    df = pd.read_csv(path)
+    df = pd.read_csv(settings.ORIGIN_FILE["file_1"])
     df.drop(settings.UND_LIST, axis=1, inplace=True)
 
     # draw the correlation series extract from correlation matrix
@@ -22,13 +20,13 @@ def corr_analyse():
     plt.show()
 
 
-def clean_data():
+def _clean_data():
     """
     drop the useless feature
     clean the data,handle the missing value
     :return:
     """
-    df = pd.read_csv(path)
+    df = pd.read_csv(settings.ORIGIN_FILE["file_1"], low_memory=False)
 
     # 1. drop the column in conf file
     df = df.drop(settings.UND_LIST, axis=1)
@@ -47,7 +45,7 @@ def clean_feature():
     process the feature to fit the AI model
     :return: processed data
     """
-    df = clean_data()
+    df = _clean_data()
 
     # 1. convert the object to int to reduce memory use
     df["livingRoom"] = df["livingRoom"].astype(int)
@@ -73,8 +71,8 @@ def clean_feature():
 
     # 5. The longitude and the latitude should combine to make prediction
     # take the center position (116.402544,39.915599)
-    df["center_r"] = ((df["Lng"]-116.402544)**2+(df["Lat"]-39.915599)**2)**0.5
-    df.to_csv(settings.OUT_FILE,encoding="utf-8",index_label="index")
+    df["center_r"] = ((df["Lng"] - 116.402544) ** 2 + (df["Lat"] - 39.915599) ** 2) ** 0.5
+    df.to_csv(settings.OUT_FILE["clean_file"], encoding="utf-8", index_label="index")
     return df
 
 
@@ -84,9 +82,8 @@ def show_map():
     :return:
     """
     df = clean_feature()
-    sns.scatterplot(x="Lng", y="Lat", hue="price",palette="viridis_r", data=df)
-    plt.scatter(x=[116.402544],y=[39.915599],sizes=[120],color="red")
+    sns.scatterplot(x="Lng", y="Lat", hue="price", palette="viridis_r", data=df)
+    plt.scatter(x=[116.402544], y=[39.915599], sizes=[120], color="red")
     plt.show()
 
-
-
+clean_feature()

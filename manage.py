@@ -5,7 +5,7 @@ cli commands are defined here
 
 import argparse
 import os
-from script.dataUtil import clean_feature
+from script.dataUtil import*
 
 version = 1.0
 
