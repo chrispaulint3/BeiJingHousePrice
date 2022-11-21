@@ -1,11 +1,12 @@
 """
 cli commands are defined here
 """
-
-
 import argparse
 import os
-from script.dataUtil import*
+import sys
+from script.dataUtil import clean_feature
+from script.train import linear_regression
+from script.train import hyper_parameters
 
 version = 1.0
 
@@ -30,32 +31,39 @@ def directory_tree():
         print("create script dir successfully")
     #
     if not os.path.exists("./script/__init__.py"):
-        with open("./script/__init__.py","w") as f:
+        with open("./script/__init__.py", "w") as f:
             pass
 
 
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description="AI training tool")
 
-def show_profile():
-    pass
+    # AI management tool use sub commands
+    sub_parser = parser.add_subparsers(help="manage the AI training")
 
+    # p1 command show the version of the tool
+    p1 = sub_parser.add_parser("version")
+    p1.set_defaults(func=show_version)
 
-parser = argparse.ArgumentParser(description="AI training tool")
+    # p2 command start the project
+    p2 = sub_parser.add_parser("createProject")
+    p2.set_defaults(func=directory_tree)
 
-# AI management tool use sub commands
-sub_parser = parser.add_subparsers(help="manage the AI training")
+    # p3 clean the dataset
+    p3 = sub_parser.add_parser("clean")
+    p3.set_defaults(func=clean_feature)
 
-# p1 command show the version of the tool
-p1 = sub_parser.add_parser("version")
-p1.set_defaults(func=show_version)
+    # p4 train the model
+    p4 = sub_parser.add_parser("train")
+    p4.add_argument("-m", "--model", help="train model linear,lasso,ridge,XGboost")
+    p4.add_argument("-s", "--save", action="store_true")
+    p4.set_defaults(func=linear_regression)
 
-# p2 command start the project
-p2 = sub_parser.add_parser("createProject")
-p2.set_defaults(func=directory_tree)
+    # p5 search for the best parameters
+    p5 = sub_parser.add_parser("search")
+    p5.add_argument("-m", "--model", help=" model parameter linear/lasso/ridge/XGboost")
+    p5.set_defaults(func=hyper_parameters)
 
-# p3 clean the dataset
-p3 = sub_parser.add_parser("clean")
-p3.set_defaults(func=clean_feature)
-
-parser.parse_args()
-args = parser.parse_args()
-args.func()
+    parser.parse_args()
+    args = parser.parse_args()
+    args.func(args)

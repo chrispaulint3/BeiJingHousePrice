@@ -86,4 +86,3 @@ def show_map():
     plt.scatter(x=[116.402544], y=[39.915599], sizes=[120], color="red")
     plt.show()
 
-clean_feature()
