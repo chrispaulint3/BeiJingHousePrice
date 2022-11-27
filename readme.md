@@ -1,4 +1,3 @@
-<center><img src="img/logo.png"/></center>
 
 # Explain why: the AI model with explainable tech for better trust
 
