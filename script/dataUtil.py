@@ -1,7 +1,10 @@
 import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
+from sklearn.model_selection import train_test_split
+
 import settings
+from sklearn import preprocessing
 
 
 def corr_analyse():
@@ -74,6 +77,38 @@ def clean_feature():
     df["center_r"] = ((df["Lng"] - 116.402544) ** 2 + (df["Lat"] - 39.915599) ** 2) ** 0.5
     df.to_csv(settings.OUT_FILE["clean_file"], encoding="utf-8", index_label="index")
     return df
+
+def dataset_process():
+    """
+    split the dataset and one hot encoding
+    23 features, 7 features one hot encode
+    :return:
+    """
+    df = pd.read_csv(settings.OUT_FILE["clean_file"])
+    df = df.drop(["index"], axis=1)
+
+    # 1. encode the the features with one hot encoder
+    # one hot encode the features
+    encoded_feature = ["elevator", "buildingType", "subway", "district", "floor_type", "renovationCondition",
+                       "buildingStructure", "fiveYearsProperty"]
+    df = pd.get_dummies(df, columns=encoded_feature)
+
+    # # 2. features min_max_scaler
+    df["tradeTime"] = pd.to_datetime(df["tradeTime"]).dt.year
+    scale_features = ["Lng", "Lat", "followers", "price","square", "livingRoom", "drawingRoom", "kitchen",
+                      "bathRoom", "constructionTime", "ladderRatio", "communityAverage", "numeric_floor", "center_r"]
+    min_max_scaler = preprocessing.MinMaxScaler()
+    df[scale_features] = min_max_scaler.fit_transform(df[scale_features])
+    df["tradeTime"] = min_max_scaler.fit_transform(df["tradeTime"].to_numpy().reshape(-1, 1))
+    return df
+
+
+# split train test data
+def split_data(df):
+    df = dataset_process()
+    target = df[settings.TARGET]
+    feature = df.drop(settings.TARGET, axis=1)
+    return train_test_split(feature, target, test_size=0.2)
 
 
 def show_map():

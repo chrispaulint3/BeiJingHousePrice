@@ -56,7 +56,7 @@ if __name__ == "__main__":
     # p4 train the model
     p4 = sub_parser.add_parser("train")
     p4.add_argument("-m", "--model", help="train model linear,lasso,ridge,XGboost")
-    p4.add_argument("-s", "--save", action="store_true")
+    p4.add_argument("-s", "--save", action="store_true",help="train the model in")
     p4.set_defaults(func=linear_regression)
 
     # p5 search for the best parameters
