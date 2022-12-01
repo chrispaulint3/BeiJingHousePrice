@@ -3,7 +3,10 @@ configure the file path and global parameters
 """
 import os
 from sklearn.linear_model import LinearRegression
+from sklearn.linear_model import Lasso
 from xgboost import XGBRegressor
+from interpret.glassbox import LinearRegression
+from sklearn.ensemble import RandomForestRegressor
 
 """
 drop the useless feature and specify the target
@@ -16,12 +19,14 @@ specify the file out put name
 """
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 ORIGIN_FILE = {"file_1": os.path.join(BASE_DIR, "dataset", "housePrice.csv")}
-OUT_FILE = {"clean_file": os.path.join(BASE_DIR, "cleanData", "clean.csv")}
+OUT_FILE = {"clean_file": os.path.join(BASE_DIR, "cleanData", "clean.csv"),
+            "model_file": os.path.join(BASE_DIR, "model", "model.joblib")}
 
 """
-model list where manage the scikit learn model configration
+model list where manage the scikit learn model configuration
 """
-MODEL = {"linear": {LinearRegression()}, "xgboost": XGBRegressor()}
+MODEL = {"linear": LinearRegression(), "lasso": Lasso(), "xgboost": XGBRegressor(),
+         "randomForest": RandomForestRegressor()}
 
 """
 hyper parameter

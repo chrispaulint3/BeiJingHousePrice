@@ -1,8 +1,10 @@
 # ignore the venv
 venv/
 
-# ignore the cleanData
+# ignore the cleanData,log
 cleanData
+log
+
 
 # ignore the cache
 __pycache__/
