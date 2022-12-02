@@ -2,16 +2,11 @@
 train AI model
 """
 import settings
-from sklearn.model_selection import train_test_split
 from joblib import dump
 from sklearn.model_selection import GridSearchCV
 from script.commonUtil import performance
-from dataUtil import dataset_process,split_data
+from script.dataUtil import dataset_process, split_data
 import time
-
-
-
-
 
 
 def linear_regression(args):
@@ -22,10 +17,9 @@ def linear_regression(args):
     """
     # preprocess the data,split the dataset
 
-
     if args.model in settings.MODEL:
         df = dataset_process()
-        x_train,x_test,y_train,y_test = split_data(df)
+        x_train, x_test, y_train, y_test = split_data(df)
         start = time.time()
         model = settings.MODEL[args.model]
         model.fit(x_train, y_train)

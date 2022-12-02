@@ -8,20 +8,16 @@ Predicting house price in Beijing and explain why the AI model comes to this con
 
 - Dataset: [Housing price in Beijing](https://www.kaggle.com/datasets/ruiqurm/lianjia)
 - AI model: linear regression, random forest...
-- explain AI model: **LIME**, **SHAP**
+- explain AI model: LIME for regression task(**LIMER**) based on **LIME**
 
-## requirements
-
+## installation
 This AI application depends on python packages below.
+create a virtual environment and run:
+```shell
+pip install -r requirements.txt
+```
 
-- _pandas_
-- _scikit-learn_
-- _matplotlib_
-- _seaborn_
-- _lime_
-- _shape_
-
-## suggestions
+## Suggestions
 
 Thanks to the open source python AI community like pytorch, scikit-learn, pandas etc.,
 the artificial intelligence application development is much easier and faster.
@@ -35,7 +31,10 @@ rebuild the AI system. So I have some suggestions below:
   data preprocessing and training the model directly.
 - script about dataset io, data preprocessing, model training put in script.
 
-## project structure
+## Three level XAI
+
+
+## Project Structure
 
 ```txt
 ai:.
@@ -63,7 +62,7 @@ ai:.
 
 you can change the workflow of ai training in script dir.
 
-## command reference
+## Command Reference
 
 For more information, please type use manage.py -h option
 
@@ -79,7 +78,7 @@ python manage.py train -s
 python manage.py predict -l
 ```
 
-## settings configuration
+## Settings Configuration
 
 ```python
 import os

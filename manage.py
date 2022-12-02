@@ -28,11 +28,10 @@ def directory_tree():
     # store the ai train script
     if not os.path.exists("./script"):
         os.mkdir("./script")
-        print("create script dir successfully")
-    #
-    if not os.path.exists("./script/__init__.py"):
         with open("./script/__init__.py", "w") as f:
             pass
+        print("create script dir successfully")
+
 
 
 if __name__ == "__main__":
