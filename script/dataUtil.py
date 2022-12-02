@@ -2,6 +2,7 @@ import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
 from sklearn.model_selection import train_test_split
+import os
 
 import settings
 from sklearn import preprocessing
@@ -78,6 +79,7 @@ def clean_feature():
     df.to_csv(settings.OUT_FILE["clean_file"], encoding="utf-8", index_label="index")
     return df
 
+
 def dataset_process():
     """
     split the dataset and one hot encoding
@@ -95,7 +97,7 @@ def dataset_process():
 
     # # 2. features min_max_scaler
     df["tradeTime"] = pd.to_datetime(df["tradeTime"]).dt.year
-    scale_features = ["Lng", "Lat", "followers", "price","square", "livingRoom", "drawingRoom", "kitchen",
+    scale_features = ["Lng", "Lat", "followers", "price", "square", "livingRoom", "drawingRoom", "kitchen",
                       "bathRoom", "constructionTime", "ladderRatio", "communityAverage", "numeric_floor", "center_r"]
     min_max_scaler = preprocessing.MinMaxScaler()
     df[scale_features] = min_max_scaler.fit_transform(df[scale_features])
@@ -104,11 +106,23 @@ def dataset_process():
 
 
 # split train test data
-def split_data(df):
-    df = dataset_process()
+def split_data(df, save=True):
+    """
+    :param df: the preprocessed data to split
+    :param save: save the train set and test set in dataset dir
+    :return:
+    """
     target = df[settings.TARGET]
     feature = df.drop(settings.TARGET, axis=1)
-    return train_test_split(feature, target, test_size=0.2)
+    x_train, x_test, y_train, y_test = train_test_split(feature, target, test_size=0.2)
+    if save:
+        x_train.to_csv(settings.OUT_FILE["x_train_file"], index=False)
+        x_test.to_csv(settings.OUT_FILE["x_test_file"], index=False)
+        y_train.to_csv(settings.OUT_FILE["y_train_file"], index=False)
+        y_test.to_csv(settings.OUT_FILE["y_test_file"], index=False)
+    return x_train, x_test, y_train, y_test
+
+
 
 
 def show_map():
@@ -121,3 +135,6 @@ def show_map():
     plt.scatter(x=[116.402544], y=[39.915599], sizes=[120], color="red")
     plt.show()
 
+if __name__ == "__main__":
+    df = dataset_process()
+    split_data(df)
